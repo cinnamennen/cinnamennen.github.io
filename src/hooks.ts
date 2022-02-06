@@ -6,7 +6,7 @@ function useData() {
   const foo = useAsync(async () => {
     return fetch("/transcripts/e1.txt").then((resp) => resp.text());
   });
-  if (foo.loading) return {};
+  if (foo.loading) return undefined;
 
   return (foo.value || "")
     .split(/\r?\n|\r/)
@@ -23,9 +23,12 @@ function useData() {
 }
 
 export function useBrennan() {
-  const data = useData()["Brennan"];
+  const data = useData();
   if (!isDefined(data)) return undefined;
+  console.log(Object.keys(data));
+
+  const bData = data["Buckster"];
   const markov = new Markov({ stateSize: 2 });
-  markov.addData(data);
+  markov.addData(bData);
   return markov;
 }
